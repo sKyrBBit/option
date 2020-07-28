@@ -1,0 +1,130 @@
+---
+instructions:
+  nop:   0x00
+  exit:  0x01
+  debug: 0x02
+  ncall: 0x0e
+  imm:   0x0f
+  push:  0x10
+  pop:   0x11
+  store: 0x12
+  load:  0x13
+  add0:  0x20
+  sub0:  0x21
+  mul0:  0x22
+  div0:  0x23
+  and0:  0x24
+  or0:   0x25
+  not0:  0x26
+  xor0:  0x27
+  gt0:   0x28
+  ge0:   0x29
+  eq0:   0x2a
+  shl0:  0x2c
+  shr0:  0x2d
+  ushl0: 0x2e
+  ushr0: 0x2f
+  add1:  0x30
+  sub1:  0x31
+  mul1:  0x32
+  div1:  0x33
+  and1:  0x34
+  or1:   0x35
+  not1:  0x36
+  xor1:  0x37
+  gt1:   0x38
+  ge1:   0x39
+  eq1:   0x3a
+  shl1:  0x3c
+  shr1:  0x3d
+  ushl1: 0x3e
+  ushr1: 0x3f
+  goto:  0x40
+  call:  0x42
+  ret:   0x43
+  ifgt:  0x48
+  ifge:  0x49
+  ifeq:  0x4a
+  new:   0x50
+  set:   0x51
+  get:   0x52
+sys:
+  0x00: "println!(\"{}\", warning(\"nop\"))"
+  0x01: "{ println!(\"{} {}\", log(\"exit status\"), operand0); break; }"
+  0x02: "{
+           println!(\"{} {:?}\", log(\"DATA:      \"), data);
+           println!(\"{} {:?}\", log(\"HEAP:      \"), heap);
+           println!(\"{} {:?}\", log(\"STACK:     \"), stack);
+           println!(\"{} {:?}\", log(\"REGISTERS: \"), registers);
+           println!(\"{} {}\",   log(\"BP:        \"), bp);
+           println!(\"{} {}\",   log(\"PC:        \"), pc);
+           loop {
+             if let Some(Ok(_)) = lines.next() {
+               break;
+             }
+           }
+        }"
+  0x0e: "natives[&(pc as u32)]()"
+  0x0f: "registers[operand0 as usize] = ((operand1 as i32) << 8) + (operand2 as i32)"
+  0x10: "stack.push(registers[operand0 as usize])"
+  0x11: "registers[operand0 as usize] = stack.pop().expect(\"STACK EMPTY\")"
+  0x12: "stack[(bp + operand0 as i32) as usize] = registers[operand1 as usize]"
+  0x13: "registers[operand0 as usize] = stack[(bp + operand1 as i32) as usize]"
+  0x42: "{
+           stack.push(bp);
+           bp = (stack.len() - 1) as i32;
+           for _ in 0..operand1 {
+             stack.push(0);
+           }
+           stack.push(pc + 1);
+           pc += operand0 as i32;
+           continue;
+        }"
+  0x43: "{
+           pc = stack.pop().expect(\"STACK EMPTY\");
+           while stack.len() - 1 > bp as usize { stack.pop().expect(\"STACK EMPTY\"); }
+           bp = stack.pop().expect(\"STACK EMPTY\");
+           continue;
+        }"
+  0x50: "{
+           for _ in 0..operand1 {
+             heap.push(0);
+           }
+           registers[operand0 as usize] = heap.len() as i32 - operand1 as i32;
+        }"
+  0x51: "heap[registers[operand0 as usize] as usize + operand1 as usize] = registers[operand2 as usize]"
+  0x52: "registers[operand0 as usize] = heap[registers[operand1 as usize] as usize + operand2 as usize]"
+calc:
+  0x20: ["+",  IR, IR, IR]
+  0x21: ["-",  IR, IR, IR]
+  0x22: ["*",  IR, IR, IR]
+  0x23: ["/",  IR, IR, IR]
+  0x24: ["&",  IR, IR, IR]
+  0x25: ["|",  IR, IR, IR]
+  0x27: ["^",  IR, IR, IR]
+  0x28: [">",  BR, IR, IR]
+  0x29: [">=", BR, IR, IR]
+  0x2a: ["==", BR, IR, IR]
+  0x2c: ["<<", IR, IR, IR]
+  0x2d: [">>", IR, IR, IR]
+  0x2e: ["<<", UR, UR, IR]
+  0x2f: [">>", UR, UR, IR]
+  0x30: ["+",  IR, IR, II]
+  0x31: ["-",  IR, IR, II]
+  0x32: ["*",  IR, IR, II]
+  0x33: ["/",  IR, IR, II]
+  0x34: ["&",  IR, IR, II]
+  0x35: ["|",  IR, IR, II]
+  0x37: ["^",  IR, IR, II]
+  0x38: [">",  BR, IR, II]
+  0x39: [">=", BR, IR, II]
+  0x3a: ["==", BR, IR, II]
+  0x3c: ["<<", IR, IR, II]
+  0x3d: [">>", IR, IR, II]
+  0x3e: ["<<", UR, UR, II]
+  0x3f: [">>", UR, UR, II]
+goto:
+  0x40:
+  0x48: ">"
+  0x49: ">="
+  0x4a: "=="

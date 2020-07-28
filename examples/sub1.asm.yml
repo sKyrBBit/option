@@ -1,0 +1,18 @@
+---
+symbols:
+  - name: sub1
+    base_address: 0
+includes: []
+references: []
+natives:
+  - native_id: 0
+    symbol_name: hello
+body:
+  - - ncall
+    - 0
+    - 0
+    - 0
+  - - ret
+    - 0
+    - 0
+    - 0

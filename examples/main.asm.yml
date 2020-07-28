@@ -1,0 +1,26 @@
+---
+symbols:
+  - name: main
+    base_address: 0x00
+includes:
+  - examples/sub1
+  - examples/sub2
+references:
+  - base_address: 0x01
+    symbol_name: sub1
+  - base_address: 0x05
+    symbol_name: sub2
+natives: []
+body:
+  - - call
+    - 0
+    - 0
+    - 0
+  - - call
+    - 0
+    - 0
+    - 0
+  - - exit
+    - 0
+    - 0
+    - 0

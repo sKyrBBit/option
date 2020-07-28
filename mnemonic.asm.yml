@@ -1,0 +1,21 @@
+---
+symbols:
+  - name: main
+    base_address: 0x00
+  - name: func
+    base_address: 0x18
+includes: []
+references:
+  - base_address: 0x11
+    symbol_name: func
+body:
+  - [imm,   1, 0, 1]
+  - [imm,   2, 0, 2]
+  - [push,  2, 0, 0]
+  - [push,  1, 0, 0]
+  - [call,  2, 0, 0]
+  - [exit,  0, 0, 0]
+  - [load,  3, -1, 0]
+  - [load,  4, -2, 0]
+  - [add0,  5, 3, 4]
+  - [ret,   0, 0, 0]

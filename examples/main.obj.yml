@@ -1,0 +1,44 @@
+---
+symbols:
+  - name: main
+    base_address: 0
+  - name: sub2
+    base_address: 5
+  - name: sub1
+    base_address: 3
+includes: []
+references: []
+natives:
+  - native_id: 3
+    symbol_name: hello
+  - native_id: 5
+    symbol_name: hello
+body:
+  - - 66
+    - 3
+    - 0
+    - 0
+  - - 66
+    - 4
+    - 0
+    - 0
+  - - 1
+    - 0
+    - 0
+    - 0
+  - - 14
+    - 0
+    - 0
+    - 0
+  - - 67
+    - 0
+    - 0
+    - 0
+  - - 14
+    - 2
+    - 0
+    - 2
+  - - 67
+    - 0
+    - 0
+    - 0

@@ -1,0 +1,12 @@
+[package]
+name = "cli"
+version = "0.1.0"
+authors = ["sKyrBBit <iamskyrabbit@gmail.com>"]
+edition = "2018"
+
+[dependencies]
+clap = "2.33.1"
+libloading = "0.6.2"
+paste = "0.1.18"
+serde = { version = "1.0.114", features = ["derive"] }
+serde_yaml = "0.8.13"
